@@ -11,36 +11,27 @@ width: 25vh;
 `
 
 export default class Coin extends Component {
-    constructor(props) {
-        super(props);
-/* removing old logic to ensure the state is not redundant, 
-so we're going to uplift the state; adding handleClick binding*/
-        this.handleClick = this.handleClick.bind(this);
-    }
 
-
-    handleClick(event) {
+    handleClick = (event) => {
         // Prevent the default action of submitting the form
         event.preventDefault();
-
-        //to know how to refer to the correct coin row; ticker is our key in CoinList.jsx
         this.props.handleRefresh(this.props.ticker);
-
-/* removing part of handleClick functionality by using prop drilling to lift the state up
-        const randomPercentage = 0.995 + Math.random() * 0.01;
-        this.setState( function(oldState) {
-            return {
-                price: oldState.price * randomPercentage
-            };
-        });
-*/
     }
 
     render() {
+        let coinBalanceContent = null;
+
+        if (this.props.showCoinBalanceHeader) {
+            //to ensure correct jsx, make sure you use a react fragment
+            coinBalanceContent = <StyledTd>{this.props.balance}</StyledTd>;
+        }
+        //Better Solution - ignore logic above and use this below instead
+          //{this.props.toggleBalance ? <StyledTd>{this.props.balance}</StyledTd> : null}
         return (
             <tr>
               <StyledTd>{this.props.name}</StyledTd>
               <StyledTd>{this.props.ticker}</StyledTd>
+              {coinBalanceContent}
               <StyledTd>${this.props.price}</StyledTd>
               <StyledTd>
                   <form action="#" method="POST">
@@ -55,5 +46,6 @@ so we're going to uplift the state; adding handleClick binding*/
 Coin.propTypes = {
     name: PropTypes.string.isRequired,
     ticker: PropTypes.string.isRequired,
+    balance: PropTypes.number.isRequired,
     price: PropTypes.number.isRequired
 }

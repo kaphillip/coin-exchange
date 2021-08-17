@@ -2,78 +2,86 @@ import React from 'react';
 import './App.css';
 import AccountBalance from './components/AccountBalance/AccountBalance';
 import CoinList from './components/CoinList/CoinList';
-//moving Coin import to CoinList.jsx, and adding CoinList import here
 import CoinHeader from './components/CoinHeader/CoinHeader';
-//moving Header and coinlogo import to CoinHeader.jsx, 
 
-//when converting from a Function to a Class-based component
-//you'll need to update the component header, and wrap the return
-//statement within a render()
 
-//function App() {
   class App extends React.Component {
-    constructor(props) {
-      super(props);
-      this.state = {
-        balance: 10000,
-        coinData: [
-          {
-            name: 'Bitcoin',
-            ticker: 'BTC',
-            price: 41034.23
-          },
-          {
-            name: 'Ethereum',
-            ticker: 'ETH',
-            price: 2122.49
-          },
-          {
-            name: 'Monero',
-            ticker: 'XMR',
-            price: 238.08
-          },
-          {
-            name: 'Cardano',
-            ticker: 'ADA',
-            price: 1.27
-          }
-        ]
-      }
-//adding logic as part of uplifting the state for handleRefresh; binding it to this state
-      this.handleRefresh = this.handleRefresh.bind(this);
+    state = {
+      balance: 11000,
+      toggleBalanceDisplay: true,
+      coinData: [
+        {
+          name: 'Bitcoin',
+          ticker: 'BTC',
+          balance: 0.5,
+          price: 41034.23
+        },
+        {
+          name: 'Ethereum',
+          ticker: 'ETH',
+          balance: 32.0,
+          price: 2122.49
+        },
+        {
+          name: 'Monero',
+          ticker: 'XMR',
+          balance: 65.5,
+          price: 238.08
+        },
+        {
+          name: 'Cardano',
+          ticker: 'ADA',
+          balance: 5000.0,
+          price: 1.27
+        }
+      ]
     }
-    handleRefresh(valueChangeTicker) {
-      //using the ticker as the query parameter, we will find the proper coin
-      const newCoinData = this.state.coinData.map( function({ticker, name, price}) {
-        let newPrice = price;
-        if ( valueChangeTicker === ticker) {
+
+    handleRefresh = (valueChangeTicker) => {
+      console.log(valueChangeTicker);
+      const newCoinData = this.state.coinData.map( function( values ) {
+        let newValues = { ...values };
+        if ( valueChangeTicker === values.ticker) {
           const randomPercentage = 0.995 + Math.random() * 0.01;
-          newPrice= newPrice * randomPercentage;
+          newValues.price *= randomPercentage;
         }
-        return{
-          ticker, //or ticker: ticker
-          name,   //or name: name
-          price: newPrice //different titles, so required to delineate between the 2
-        }
+        return newValues;
       });
 
       this.setState({coinData: newCoinData});
     }
 
+    toggleBalance = (valueChangeDisplay) => {
+      console.log(valueChangeDisplay);
+
+      let newBalanceDisplay = this.state.toggleBalanceDisplay.valueOf();
+      if ( newBalanceDisplay === true) {
+        newBalanceDisplay = false;
+      }
+      else {
+        newBalanceDisplay = true;
+      }
+
+      console.log(newBalanceDisplay);
+      this.setState({toggleBalanceDisplay: newBalanceDisplay});
+    }
 
     render() {
       return (
         <div className="App">
           <CoinHeader />
           <div>
-            <AccountBalance amount={this.state.balance} />
-            <CoinList coinData={this.state.coinData} handleRefresh={this.handleRefresh} />
+            <AccountBalance amount={this.state.balance} 
+                            showBalance={this.state.toggleBalanceDisplay}
+                            toggleBalance={this.toggleBalance}/>
+            <CoinList coinData={this.state.coinData} 
+                      handleRefresh={this.handleRefresh} 
+                      showCoinBalanceHeader={this.state.toggleBalanceDisplay}/>
           </div>
         </div>
       );
 
     }
   }
-
 
 export default App;
