@@ -10,6 +10,12 @@
   font-size: 1.5rem;
 }
 
+.coin-markcap-table {
+  margin: 60px auto 60px auto;
+  display: inline-block;
+  font-size: 1.5rem;
+}
+
 .App-logo {
   height: 8rem;
   pointer-events: none;

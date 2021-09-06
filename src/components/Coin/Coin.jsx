@@ -1,4 +1,5 @@
-import React, { Component } from 'react'
+//import React, { Component } from 'react'  //for class component use
+import React from 'react';  //for functional component use
 //import './Coin.css';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
@@ -10,40 +11,43 @@ border: 1px solid #e9ebe4;
 width: 25vh;
 `
 
-export default class Coin extends Component {
+export default function Coin(props) {
 
-    handleClick = (event) => {
+    const handleClick = (event) => {
         // Prevent the default action of submitting the form
         event.preventDefault();
-        this.props.handleRefresh(this.props.ticker);
+        props.handleRefresh(props.id);
     }
 
-    render() {
-        let coinBalanceContent = null;
 
-        if (this.props.showCoinBalanceHeader) {
-            //to ensure correct jsx, make sure you use a react fragment
-            coinBalanceContent = <StyledTd>{this.props.balance}</StyledTd>;
-        }
-        //Better Solution - ignore logic above and use this below instead
-          //{this.props.toggleBalance ? <StyledTd>{this.props.balance}</StyledTd> : null}
-        return (
-            <tr>
-              <StyledTd>{this.props.name}</StyledTd>
-              <StyledTd>{this.props.ticker}</StyledTd>
-              {coinBalanceContent}
-              <StyledTd>${this.props.price}</StyledTd>
-              <StyledTd>
-                  <form action="#" method="POST">
-                    <button onClick={this.handleClick}>Refresh</button>
-                  </form>
-              </StyledTd>
-            </tr>
-          );
+    let coinBalanceContent = null;
+
+    if (props.showCoinBalanceHeader) {
+        //to ensure correct jsx, make sure you use a react fragment
+        coinBalanceContent = <StyledTd>{props.balance}</StyledTd>;
     }
+    //Better Solution - ignore logic above and use this below instead
+        //{this.props.toggleBalance ? <StyledTd>{this.props.balance}</StyledTd> : null}
+    return (
+        <tr>
+            <StyledTd>{props.rank}</StyledTd>
+            <StyledTd>{props.name}</StyledTd>
+            <StyledTd>{props.ticker}</StyledTd>
+            {coinBalanceContent}
+            <StyledTd>${props.price}</StyledTd>
+            <StyledTd>
+                <form action="#" method="POST">
+                <button onClick={handleClick}>Refresh</button>
+                </form>
+            </StyledTd>
+        </tr>
+        );
 }
 
+
 Coin.propTypes = {
+    id: PropTypes.string.isRequired,
+    rank: PropTypes.number.isRequired,
     name: PropTypes.string.isRequired,
     ticker: PropTypes.string.isRequired,
     balance: PropTypes.number.isRequired,
