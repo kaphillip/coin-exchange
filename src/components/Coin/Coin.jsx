@@ -1,17 +1,28 @@
-//import React, { Component } from 'react'  //for class component use
-import React from 'react';  //for functional component use
-//import './Coin.css';
+import React, {useEffect, useRef} from 'react';  //for functional component use
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 
-//removing use of .css file in favor of styled-components
 
 const StyledTd = styled.td `
 border: 1px solid #e9ebe4;
-width: 25vh;
+width: 15vh;
+`
+
+const StyledWidget = styled.td `
+border: 1px solid #e9ebe4;
+
+height: 20vh;
 `
 
 export default function Coin(props) {
+    
+    const _ref3 = useRef(null);
+    const widgetScript3 = document.createElement('script');
+    widgetScript3.src = 'https://widgets.coingecko.com/coingecko-coin-ticker-widget.js';
+    widgetScript3.async = true;
+    const widgetLoad3 = (<coingecko-coin-ticker-widget ref={_ref3} coin-id={props.name} currency="usd" 
+    locale="en" width="300" ></coingecko-coin-ticker-widget>);
+
 
     const handleClick = (event) => {
         // Prevent the default action of submitting the form
@@ -19,15 +30,19 @@ export default function Coin(props) {
         props.handleRefresh(props.id);
     }
 
-
     let coinBalanceContent = null;
 
+    useEffect(function() {
+        _ref3.current.appendChild(widgetScript3);
+        //console.log("Ticker Build: " + _ref3 + "and" + _ref3.current + "and" + widgetScript3);
+        });
+
+
     if (props.showCoinBalanceHeader) {
-        //to ensure correct jsx, make sure you use a react fragment
         coinBalanceContent = <StyledTd>{props.balance}</StyledTd>;
     }
-    //Better Solution - ignore logic above and use this below instead
-        //{this.props.toggleBalance ? <StyledTd>{this.props.balance}</StyledTd> : null}
+
+
     return (
         <tr>
             <StyledTd>{props.rank}</StyledTd>
@@ -37,13 +52,14 @@ export default function Coin(props) {
             <StyledTd>${props.price}</StyledTd>
             <StyledTd>
                 <form action="#" method="POST">
-                <button onClick={handleClick}>Refresh</button>
+                <button className="myButton"
+                 onClick={handleClick}>View Details</button>
                 </form>
             </StyledTd>
+            <StyledWidget>{widgetLoad3}</StyledWidget>
         </tr>
         );
 }
-
 
 Coin.propTypes = {
     id: PropTypes.string.isRequired,

@@ -1,23 +1,26 @@
-//import React, { Component } from 'react'  //for class component use
 import React from 'react';  //for functional component use
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
+import TickerWidget from '../TickerWidget/TickerWidget';
 
 const Section = styled.section `
-    border: 2px solid red;
-    font-size: 2rem;
-    padding: 1.5rem 0 1.5rem 5 rem;
+    border: 2px solid whitesmoke;
+    font-size: 1.55rem;
+    padding: 2.5rem  2.5rem 5 rem;
+    box-shadow: 2px 2px 7px 1px #1C6EA4;
+    background-color: #8CBAFF;
+    font-family: "Arial", Gadget, sans-serif;
+    font-weight: 700;
+    padding-top: 1rem;
 `
 
 export default function AccountBalance(props){
 
     const balanceClick = (event) => {
-        // Prevent the default action of submitting the form
         event.preventDefault();
         props.toggleBalance();
     }
-
-    //to switch to show balance from hide balance, the showBalance in App.js must be false 
+ 
     const buttonText = props.showBalance ? 'Hide Balance' : 'Show Balance';
     let content = null;
 
@@ -25,18 +28,22 @@ export default function AccountBalance(props){
         //to ensure correct jsx, make sure you use a react fragment
         content = <>{props.amount}</>;
     }
-    //original -- Balance: ${this.props.ammount}
+
     return (
         <>
-        <h2>
-            ACCOUNT BALANCE
-        </h2>
+        <h1>
+            ACCOUNT MENU
+        </h1>
         <Section>
-            Balance: ${content}
+            BALANCE: ${content}
             <form action="#" method="POST">
-            <button onClick={balanceClick}>{buttonText}</button>
+            <button className="myButton" 
+            onClick={balanceClick}>{buttonText}</button>
             </form>
+            <br></br>
+            <TickerWidget />
         </Section>
+        <br></br>
         </>
     );
 }
