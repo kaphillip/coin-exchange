@@ -23,9 +23,10 @@ const Section2 = styled.section `
     margin-left: 40rem;
     margin-right: 40rem;
     padding: 1rem;
+    display: inline-block;
 `
 
-//This will be updated with a specific coin, but default will be BTC
+/***  This will be updated with a specific coin, but default will be BTC  ***/
 export default function CoinMenu(props){
 
     const helicopterClick = (event) => {
@@ -45,7 +46,6 @@ export default function CoinMenu(props){
 
     const [transactionAmount, setTransactionAmount] = useState(0);
 
-    //Dynamically update the value based on user input
     const updateTransactionAmount = (event) => {
         setTransactionAmount(event.target.value);
     }

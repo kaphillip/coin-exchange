@@ -1,5 +1,4 @@
 import React, { Component } from 'react'
-//import logo from '../../../src/logo.svg';
 import bitcoin from '../../../src/bitcoin.png';
 import ethereum from '../../../src/ethereum-logo2.png';
 

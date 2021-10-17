@@ -1,4 +1,4 @@
-import React, {useEffect, useRef} from 'react';  //for functional component use
+import React, {useEffect, useRef} from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 
@@ -10,10 +10,10 @@ width: 15vh;
 
 const StyledWidget = styled.td `
 border: 1px solid #e9ebe4;
-
 height: 20vh;
 `
 
+/***  Setup properties for each coin to be displayed  ***/
 export default function Coin(props) {
     
     const _ref3 = useRef(null);
@@ -25,7 +25,6 @@ export default function Coin(props) {
 
 
     const handleClick = (event) => {
-        // Prevent the default action of submitting the form
         event.preventDefault();
         props.handleRefresh(props.id);
     }

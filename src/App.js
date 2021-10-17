@@ -12,24 +12,22 @@ function App (props) {
   const [balance, setBalance] = useState(11000);
   const [toggleBalanceDisplay, setShowBalance] = useState(true);
   const [coinData, setCoinData] = useState([]);
-  const [coinMarkCapCount, setCoinMarkCapCount] = useState(5);
+  //Will add coin count toggle in future iteration
+  const [coinMarkCapCount, setCoinMarkCapCount] = useState(10);
   const [coinMenuTickerId, setcoinMenuTickerId] = useState("btc-bitcoin");
   const [coinMenuTicker, setcoinMenuTicker] = useState("BTC");
   const [coinMenuName, setcoinMenuName] = useState("Bitcoin");
 
 
-//Will need to "actively" call componentDidMount for it to work in a functional environ vs class environ
-    //call logic in useEffect; use componentDidMount for async call
+  /***  Function Notes: Call and get list of tokens by rank, set the coinData state  ***/
   const componentDidMount = async () => {
     const rowCount = coinMarkCapCount;
     console.log(rowCount);
-    const response = await axios.get('https://api.coinpaprika.com/v1/coins');
-    const coinIds = response.data.slice(0, rowCount).map(coin => coin.id);
-    const tickerUrl = 'https://api.coinpaprika.com/v1/tickers/';
-    const promises = coinIds.map(id => axios.get(tickerUrl + id));
-    const coinData = await Promise.all(promises);
-    const coinPriceData = coinData.map(function(response) {
-      const coin = response.data;
+    const tickerUrl = await axios.get('https://api.coinpaprika.com/v1/tickers/');
+    const coinList = tickerUrl.data.slice(0, rowCount);
+    console.log(coinList);
+    const coinPriceData = coinList.map(function( values ) {
+      let coin = { ...values }; //shallow copy
       return {
         key: coin.id, 
         id: coin.id,
@@ -39,23 +37,23 @@ function App (props) {
         balance: 0,
         price: formatPrice(coin.quotes.USD.price)
       };
-    })
-    //old version// this.setState({ coinData: coinPriceData });
+    });
+
     setCoinData(coinPriceData);
   }
 
 
+  /***   Function Notes: Initiate the process of componentDidMount ***/
   useEffect(function() {
-    //we only want to call this and load data, IF AND ONLY IF, we need the data
     if (coinData.length === 0) {
       componentDidMount();
     } 
   });
 
 
- const handleRefresh = async (valueChangeId) => {
-    console.log(valueChangeId);
-    console.log(coinMenuTickerId);
+  /***  Function Notes: Set focus to target coin and update the listed price  ***/
+  const handleRefresh = async (valueChangeId) => {
+    console.log(valueChangeId, coinMenuTickerId);
     const tickerUrl = `https://api.coinpaprika.com/v1/tickers/${valueChangeId}`;
     const response = await axios.get(tickerUrl);
     const newPrice = formatPrice(response.data.quotes.USD.price);
@@ -78,11 +76,13 @@ function App (props) {
   }
 
 
+  /***  Function Notes: Show/Hide Fiat/Coin Balance(s)  ***/
    const toggleBalance = () => {
       setShowBalance(oldValue => !oldValue);
     }
 
 
+  /***  Function Notes: Fiat Printer go BRRRRR  ***/
     const increaseBalance = () => {
       let newBalance = balance;
       newBalance += 1200;
@@ -91,6 +91,7 @@ function App (props) {
     }
 
 
+  /***  Function Notes: Per target coin, initiate a buy and update fiat/coin balance  ***/
   const handleBuy = (buyAmount) => {
     console.log(coinMenuTickerId, buyAmount);
     let newBalance = formatPrice(balance);
@@ -116,6 +117,7 @@ function App (props) {
   }
 
 
+  /***  Function Notes: Per target coin, initiate a sell and update fiat/coin balance  ***/
   const handleSell = (sellAmount) => {
     console.log(coinMenuTickerId, sellAmount);
     let newBalance = formatPrice(balance);
@@ -131,8 +133,7 @@ function App (props) {
         else {
           newBalance += fiatSell;
           newValues.balance = values.balance - (fiatSell/values.price);
-          console.log(newBalance);
-          console.log(newValues.balance);
+          console.log("newBalance " + newBalance + ", new coin balance " + newValues.balance);
         }
       }
       return newValues;

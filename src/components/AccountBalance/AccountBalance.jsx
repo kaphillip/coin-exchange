@@ -1,4 +1,4 @@
-import React from 'react';  //for functional component use
+import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import TickerWidget from '../TickerWidget/TickerWidget';
@@ -14,6 +14,7 @@ const Section = styled.section `
     padding-top: 1rem;
 `
 
+/***  Display Account Menu, fiat/coin balance, streaming coin prices  ***/
 export default function AccountBalance(props){
 
     const balanceClick = (event) => {
@@ -25,7 +26,6 @@ export default function AccountBalance(props){
     let content = null;
 
     if (props.showBalance) {
-        //to ensure correct jsx, make sure you use a react fragment
         content = <>{props.amount}</>;
     }
 

@@ -1,10 +1,10 @@
-//import React, { Component } from 'react'  //for class component use
-import React, {useEffect, useRef} from 'react';  //for functional component use
+import React, {useEffect, useRef} from 'react';
 import PropTypes from 'prop-types';
 import Coin from '../Coin/Coin';
 import CoinMenu from '../CoinMenu/CoinMenu';
-//import axios from 'axios';
 
+
+/***  Display coin list and respective properties  ***/
 export default function CoinList(props) {
   let coinBalanceHeader = null;
 
@@ -66,7 +66,7 @@ export default function CoinList(props) {
       <tbody>
         {
           props.coinData.map( ({id, rank, name, ticker, balance, price}) =>
-          <Coin key={id} //should be key={key}
+          <Coin key={id}
                 id={id}
                 handleRefresh={props.handleRefresh} 
                 showCoinBalanceHeader={props.showCoinBalanceHeader}

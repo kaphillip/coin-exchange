@@ -1,5 +1,4 @@
-import React, { Component } from 'react'  //for class component use
-
+import React, { Component } from 'react'
 
 export default class TickerWidget extends Component{
     constructor(props) {
